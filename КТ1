@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE timeTable [
+  <!ELEMENT timeTable (complexes+, lessons+)>
+<!ELEMENT complexes (complex+)>
+<!ELEMENT lessons (lesson+)>
+<!ELEMENT lesson (date, time)>
+<!ELEMENT complex (name, address)>
+<!ELEMENT date (#PCDATA)>
+<!ELEMENT time (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT address (#PCDATA)>
+<!ATTLIST complex id ID #REQUIRED>
+<!ATTLIST lesson
+  code CDATA #REQUIRED
+  complex IDREF #REQUIRED
+  >
+]>
+
+<timeTable>
+  <complexes>
+  <complex id="PG003">
+    <name>
+    Тех отдел
+    </name>
+    <address>
+    Дом 5 улц 6
+    </address>
+  </complex>
+  </complexes>
+<lessons>
+      <lesson code="003" complex="PG003">
+        <date>
+        31 декабря 025
+        </date>
+        <time>
+        20:00
+        </time>
+      </lesson>
+    </lessons>
+    </timeTable>
