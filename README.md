@@ -1,0 +1,85 @@
+﻿<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="notebook">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="offices">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="office" minOccurs="1" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute name="code" type="xs:string" use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="person" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="name">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="first" type="xs:string"/>
+                                        <xs:element name="surname" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="address">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="city" type="xs:string"/>
+                                        <xs:element name="street" type="xs:string"/>
+                                        <xs:element name="index" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="phones">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="phone" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:simpleContent>
+                                                    <xs:extension base="xs:string">
+                                                        <xs:attribute name="type" type="xs:string" use="optional">
+                                                            <xs:simpleType>
+                                                                <xs:restriction base="xs:string">
+                                                                    <xs:enumeration value="work"/>
+                                                                    <xs:enumeration value="home"/>
+                                                                </xs:restriction>
+                                                            </xs:simpleType>
+                                                        </xs:attribute>
+                                                    </xs:extension>
+                                                </xs:simpleContent>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="xs:string" use="required"/>    <!-- Уникальный ID -->
+                        <xs:attribute name="office" type="xs:string" use="required"/> <!-- Ссылка на офис -->
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:unique name="uniqueOfficeCode">
+        <xs:selector xpath="offices/office"/>
+        <xs:field xpath="@code"/>
+    </xs:unique>
+    
+    <xs:unique name="uniquePersonId">
+        <xs:selector xpath="person"/>
+        <xs:field xpath="@id"/>
+    </xs:unique>
+    
+    <xs:keyref name="officeReference" refer="uniqueOfficeCode">
+        <xs:selector xpath="person"/>
+        <xs:field xpath="@office"/>
+    </xs:keyref>
+</xs:schema>
