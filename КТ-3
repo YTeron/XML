@@ -1,46 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-<xsl:output method="html" encoding="utf-8" indent="yes"/>
 
+    <xsl:key name="courses-by-teacher" match="course" use="teachers/teacher"/>
+    
+    <xsl:key name="courses-by-keyword" match="course" use="keywords/keyword"/>
 
-<xsl:key name="byteacher" match="course" use="teacher"/>
-<xsl:key name="bytopic" match="course" use="topics/topic"/>
-
-<xsl:param name="teacher" select="'Борисов И.О.'"/>
-<xsl:param name="topxml" select="'XML'"/>
-<xsl:param name="topxslt" select="'XSLT'"/>
-
-<xsl:template match="/">
-<html>
-<head>
-    <title>Наши курсы</title>
-    <meta charset="utf-8"/>
-</head>
-<body>
-    <h1>Наши курсы</h1>
-
-    <h3>читает <xsl:value-of select="$teacher"/></h3>
-    <ul>
-        <xsl:for-each select="key('byteacher', $teacher)">
-            <li><xsl:value-of select="title"/></li>
-        </xsl:for-each>
-    </ul>
-
-    <h3>используют <xsl:value-of select="$topxml"/></h3>
-    <ul>
-        <xsl:for-each select="key('bytopic', $topxml)">
-            <li><xsl:value-of select="title"/></li>
-        </xsl:for-each>
-    </ul>
-
-    <h3>читает <xsl:value-of select="$teacher"/>, есть тема <xsl:value-of select="$topxslt"/></h3>
-    <ul>
-        <xsl:for-each select="key('byteacher', $teacher)[topics/topic = $topxslt]">
-            <li><xsl:value-of select="title"/></li>
-        </xsl:for-each>
-    </ul>
-</body>
-</html>
-</xsl:template>
+    <xsl:template match="/">
+        <html>
+            <head>
+                <title>Наши курсы</title>
+            </head>
+            <body>
+                <h1>Наши курсы</h1>
+                
+                <h3>читает Борисов И.О.</h3>
+                <ul>
+                    <xsl:for-each select="key('courses-by-teacher', 'Борисов И.О.')">
+                        <xsl:sort select="title"/>
+                        <li><xsl:value-of select="title"/></li>
+                    </xsl:for-each>
+                </ul>
+                
+                <h3>используют XML</h3>
+                <ul>
+                    <xsl:for-each select="key('courses-by-keyword', 'XML')">
+                        <xsl:sort select="title"/>
+                        <li><xsl:value-of select="title"/></li>
+                    </xsl:for-each>
+                </ul>
+                
+                
+                <h3>Курсы Борисова И.О. с темой XSLT</h3>
+                <ul>
+                    <xsl:for-each select="key('courses-by-teacher', 'Борисов И.О.')">
+                        <xsl:if test="keywords/keyword = 'XSLT'">
+                            <li><xsl:value-of select="title"/></li>
+                        </xsl:if>
+                    </xsl:for-each>
+                </ul>
+            </body>
+        </html>
+    </xsl:template>
 
 </xsl:stylesheet>
