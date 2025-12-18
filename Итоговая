@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
+
+  <xsl:template match="/">
+    <items>
+      <xsl:for-each select="//li">
+        <xsl:variable name="parent-id">
+          <xsl:choose>
+            <xsl:when test="ancestor::li">
+              <xsl:value-of select="ancestor::li[1]/@data-id"/>
+            </xsl:when>
+            <xsl:otherwise>0</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        
+        <item id="{@data-id}" 
+              parentid="{$parent-id}" 
+              author="{b}">
+          <xsl:value-of select="span"/>
+        </item>
+      </xsl:for-each>
+    </items>
+  </xsl:template>
+
+</xsl:stylesheet>
